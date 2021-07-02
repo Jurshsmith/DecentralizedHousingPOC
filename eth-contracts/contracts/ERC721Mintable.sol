@@ -45,7 +45,7 @@ contract Ownable {
     }
 }
 
-//  TODO's: Create a Pausable contract that inherits from the Ownable contract
+//   Create a Pausable contract that inherits from the Ownable contract
 //  1) create a private '_paused' variable of type bool
 //  2) create a public setter using the inherited onlyOwner modifier
 //  3) create an internal constructor that sets the _paused variable to false
@@ -53,6 +53,28 @@ contract Ownable {
 //  5) create a Paused & Unpaused event that emits the address that triggered the event
 contract Pausable is Ownable {
     bool private _paused;
+
+    event Paused(address account);
+    event Unpaused(address account);
+
+    modifier whenNotPaused() {
+        require(!_paused, "It is paused already!");
+        _;
+    }
+
+    constructor() public {
+        _paused = false;
+    }
+
+    function setPauseState(bool paused) public onlyOwner whenNotPaused {
+        _paused = paused;
+
+        if (paused) {
+            emit Paused(msg.sender);
+        } else {
+            emit Unpaused(msg.sender);
+        }
+    }
 }
 
 contract ERC165 {
@@ -145,24 +167,40 @@ contract ERC721 is Pausable, ERC165 {
     }
 
     function balanceOf(address owner) public view returns (uint256) {
-        // TODO return the token balance of given address
+        // return the token balance of given address
         // TIP: remember the functions to use for Counters. you can refresh yourself with the link above
+        return _ownedTokensCount[owner].current();
     }
 
     function ownerOf(uint256 tokenId) public view returns (address) {
         // TODO return the owner of the given tokenId
+        return _tokenOwner[tokenId];
     }
 
     //    @dev Approves another address to transfer the given token ID
     function approve(address to, uint256 tokenId) public {
-        // TODO require the given address to not be the owner of the tokenId
+        // require the given address to not be the owner of the tokenId
         // TODO require the msg sender to be the owner of the contract or isApprovedForAll() to be true
         // TODO add 'to' address to token approvals
         // TODO emit Approval Event
+        address ownerOfToken = ownerOf(tokenId);
+        require(ownerOfToken != to, "This token is owned by another entity");
+
+        require(
+            (msg.sender == ownerOfToken) ||
+                isApprovedForAll(msg.sender, ownerOfToken),
+            "Requires registered entity"
+        );
+
+        _tokenApprovals[tokenId] = to;
+
+        emit Approval(ownerOfToken, to, tokenId);
     }
 
     function getApproved(uint256 tokenId) public view returns (address) {
         // TODO return token approval if it exists
+        require(_exists(tokenId), "This token does not exist");
+        return _tokenApprovals[tokenId];
     }
 
     /**
@@ -253,6 +291,13 @@ contract ERC721 is Pausable, ERC165 {
         // TODO revert if given tokenId already exists or given address is invalid
         // TODO mint tokenId to given address & increase token count of owner
         // TODO emit Transfer event
+        require(to != address(0), "Address is invalid");
+        require(!_exists(tokenId), "Token already exists");
+
+        _tokenOwner[tokenId] = to;
+        _ownedTokensCount[to].increment();
+
+        emit Transfer(address(0), to, tokenId);
     }
 
     // @dev Internal function to transfer ownership of a given token ID to another address.
@@ -267,6 +312,22 @@ contract ERC721 is Pausable, ERC165 {
         // TODO: clear approval
         // TODO: update token counts & transfer ownership of the token ID
         // TODO: emit correct event
+        require(
+            ownerOf(tokenId) == from,
+            "You can't transfer a token you don't own"
+        );
+
+        require(to != address(0), "Invalid destination address");
+
+        _clearApproval(tokenId);
+
+        _ownedTokensCount[from].decrement();
+
+        _ownedTokensCount[to].increment();
+
+        _tokenOwner[tokenId] = to;
+
+        emit Transfer(from, to, tokenId);
     }
 
     /**
@@ -449,6 +510,7 @@ contract ERC721Enumerable is ERC165, ERC721 {
         // then delete the last slot (swap and pop).
 
         uint256 lastTokenIndex = _ownedTokens[from].length.sub(1);
+
         uint256 tokenIndex = _ownedTokensIndex[tokenId];
 
         // When the token to delete is the last token, the swap operation is unnecessary
@@ -476,11 +538,13 @@ contract ERC721Enumerable is ERC165, ERC721 {
         // then delete the last slot (swap and pop).
 
         uint256 lastTokenIndex = _allTokens.length.sub(1);
+
         uint256 tokenIndex = _allTokensIndex[tokenId];
 
         // When the token to delete is the last token, the swap operation is unnecessary. However, since this occurs so
         // rarely (when the last minted token is burnt) that we still do the swap here to avoid the gas cost of adding
         // an 'if' statement (like in _removeTokenFromOwnerEnumeration)
+
         uint256 lastTokenId = _allTokens[lastTokenIndex];
 
         _allTokens[tokenIndex] = lastTokenId; // Move the last token to the slot of the to-delete token
