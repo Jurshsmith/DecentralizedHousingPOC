@@ -5,16 +5,22 @@
   "main": "index.js",
   "scripts": {
     "dev": "lite-server",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prettier": "prettier --write 'eth-contracts/**/*.sol'"
+    "test": "concurrently --success first --kill-others \"ganache-cli -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'\" \"cd eth-contracts && truffle test",
+    "prettier": "prettier --write 'eth-contracts/**/*.sol'",
+    "test:contracts": "concurrently --success first --kill-others \"ganache-cli -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'\" \"cd eth-contracts && truffle test",
+    "test:contracts:watch": "gulp -- watchContractsAndTestFilesForAppTests"
   },
   "keywords": [],
-  "author": "pk <pkrasam@gmail.com> (https://ipfs.infura.io/ipfs/QmSXiR9Khm3yo1J67nUopvVBxFJ8YGN2fUGZ34Etr3m92x/)",
+  "author": "jurshsmith@gmail.com",
   "license": "MIT",
   "devDependencies": {
     "lite-server": "2.4.0"
   },
   "dependencies": {
+    "concurrently": "^6.2.0",
+    "ganache-cli": "^6.12.2",
+    "gulp": "^4.0.2",
+    "gulp-run": "^1.7.1",
     "openzeppelin-solidity": "^2.2.0",
     "prettier": "^2.3.2",
     "prettier-plugin-solidity": "^1.0.0-beta.13",
