@@ -581,6 +581,9 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
         string memory baseTokenURI
     ) public {
         // TODO: set instance var values
+        _name = name;
+        _symbol = symbol;
+        _baseTokenURI = baseTokenURI;
 
         _registerInterface(_INTERFACE_ID_ERC721_METADATA);
     }
@@ -623,9 +626,8 @@ contract DecentralizedHousingToken is ERC721Metadata {
         ERC721Metadata(_tokenName, _symbolName, _baseTokenURI)
     {}
 
-    function mint(address to, uint256 tokenId) public onlyOwner returns (bool) {
+    function mint(address to, uint256 tokenId) public onlyOwner {
         super._mint(to, tokenId); // to access inherit stateful constructor contract function
         super.setTokenURI(tokenId);
-        return (true);
     }
 }
