@@ -3,5 +3,59 @@
 // Test verification with correct proof
 // - use the contents from proof.json generated from zokrates steps
 
-    
 // Test verification with incorrect proof
+const AssetVerifier = artifacts.require('AssetVerifier');
+
+const proofData = {
+  "proof": {
+    "a": [
+      "0x13285c52f0d7194e658d3a16b0f5db639b7aa9a63f55959143ed2d38a644febb",
+      "0x0666b1c476e5b72f5459cde2983f6b573dcf2c76b486a557b2b13d5a3eb68ea1"
+    ],
+    "b": [
+      [
+        "0x17f3ecf80bb9b6d01d9da7428ab2741e2331e37d6846468adf68a25e533a8751",
+        "0x0f260051f81546c5164416ae809172ed22bc7e3d120496eeeff618df0406bd44"
+      ],
+      [
+        "0x1da73e0947c1160f1a50991d0fe143749a619703eaa57ab587ec2276ae093f9a",
+        "0x13bb56a84c8bb2e9223d428f1a1adbfac9612b6dfdd45f9d044e0778902e787d"
+      ]
+    ],
+    "c": [
+      "0x0a11879f4b7fa6bb128b0074b4b38950d0b63d0ef503b697d305c528e33afdbb",
+      "0x2a09a88ed5e0960c5e30bb9ebba1723772e951d423fb713cc47dfaa6e964b782"
+    ]
+  },
+  "inputs": [
+    "0x000000000000000000000000000000000000000000000000000000000000002c",
+    "0x0000000000000000000000000000000000000000000000000000000000000000"
+  ]
+}
+
+contract('AssetVerifier', accounts => {
+  describe('Test AssetVerifier (SquareVerifier)', function () {
+
+    const account_one = accounts[0];
+
+    beforeEach(async () => {
+      this.contract = await AssetVerifier.new({ from: account_one });
+    });
+
+    it('verifies successfully with correct proof and witness', async () => {
+      const isVerified = await this.contract.verifyTx.call(
+        proofData.proof.a, proofData.proof.b, proofData.proof.c,
+        proofData.inputs
+      )
+      assert.equal(isVerified, true, 'it should succeed since they are actual proof data')
+    });
+
+    it('rejects invalid proof', async () => {
+      const isVerified = await this.contract.verifyTx.call(
+        proofData.proof.a, proofData.proof.b, proofData.proof.a,
+        proofData.inputs
+      )
+      assert.strictEqual(isVerified, false, 'should not succeed since witness or proof data is corrupt')
+    })
+  })
+})

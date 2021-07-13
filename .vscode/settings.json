@@ -1,3 +1,11 @@
 {
-  "solidity.compileUsingRemoteVersion": "v0.5.0+commit.1d4f565a"
+  "solidity.compileUsingRemoteVersion": "v0.5.0+commit.1d4f565a",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true
+  }
 }
