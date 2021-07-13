@@ -26,7 +26,7 @@ contract SolutionAssetVerifier is DecentralizedHousingToken {
         assetVerifier = AssetVerifier(assetVerifierContractAddress);
     }
 
-    function addSolution(uint256[2] memory input) public {
+    function addSolution() external {
         Solution memory newSolution = Solution(solutions.length, msg.sender);
 
         solutions.push(newSolution);
