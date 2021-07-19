@@ -8,7 +8,10 @@
     "test": "concurrently --success first --kill-others \"ganache-cli -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'\" \"cd eth-contracts && truffle test",
     "prettier": "prettier --write 'eth-contracts/**/*.sol'",
     "test:contracts": "concurrently --success first --kill-others \"ganache-cli -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'\" \"cd eth-contracts && truffle test",
-    "test:contracts:watch": "gulp -- watchContractsAndTestFilesForAppTests"
+    "test:contracts:watch": "gulp -- watchContractsAndTestFilesForAppTests",
+    "compile": "cd eth-contracts && truffle compile",
+    "migrate:rinkeby": "cd eth-contracts && truffle migrate --network rinkeby",
+    "mint:tokens": "cd eth-contracts && node node-client"
   },
   "keywords": [],
   "author": "jurshsmith@gmail.com",
@@ -17,6 +20,7 @@
     "lite-server": "2.4.0"
   },
   "dependencies": {
+    "@truffle/hdwallet-provider": "^1.4.1",
     "concurrently": "^6.2.0",
     "dotenv": "^10.0.0",
     "ganache-cli": "^6.12.2",
@@ -27,6 +31,6 @@
     "prettier-plugin-solidity": "^1.0.0-beta.13",
     "solc": "^0.5.2",
     "solc-js": "^0.5.2",
-    "truffle-hdwallet-provider": "^1.0.17"
+    "web3": "^1.2.1"
   }
 }

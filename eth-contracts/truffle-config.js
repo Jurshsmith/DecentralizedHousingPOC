@@ -17,10 +17,8 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-
-const HDWalletProvider = require('truffle-hdwallet-provider');
-
-require('dotenv').config();
+ require('dotenv').config({ path: '../.env' });
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 const { INFURA_KEY, MNEMONIC, PUBLIC_KEY } = process.env;
 
@@ -48,16 +46,15 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     rinkeby: {
-      provider: () => new HDWalletProvider(MNEMONIC, `wss://rinkeby.infura.io/ws/v3/${INFURA_KEY}`),
-      gas: 5000000,
-      gasPrice: 45000000000,
+      provider: () => new HDWalletProvider(MNEMONIC, `https://rinkeby.infura.io/v3/${INFURA_KEY}`, 0, 20),
+      gas: 5500000,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: false,
       websocket: true,
       timeoutBlocks: 50000,
       networkCheckTimeout: 1000000,
-      network_id: 4,
+      network_id: '*',
       from: PUBLIC_KEY
     },
 
