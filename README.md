@@ -43,4 +43,4 @@ View token etherscan here: https://rinkeby.etherscan.io/token/0x4d28cea633617030
 
 ![Contract Creation](/images/address.png)
 
-![Minting Tokens](/images/minted_tokens.png)
+![Minting Tokens](/images/minted_tokens.PNG)
