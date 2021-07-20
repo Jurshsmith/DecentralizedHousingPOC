@@ -30,10 +30,14 @@ A Smart Contract that helps mintable, transferrable and provable real estate pro
 - [ZoKrates](https://github.com/Zokrates/ZoKrates)
 
 ### Contract Details
-contractName: DecentralizedHousingToken
+ContractName: DecentralizedHousingToken
 Symbol: DHT
 contractAddress: 0x4D28Cea6336170307F21f8Bd2C9e326dfb581159
 View token etherscan here: https://rinkeby.etherscan.io/token/0x4d28cea6336170307f21f8bd2c9e326dfb581159
+
+### Contract's ABI
+After running `npm run build`
+Check `eth-contracts/build/contracts` for Contracts ABI 
 
 ### Assets Activity on Opensea
 5 assets left for initial owner - https://testnets.opensea.io/Jurshsmith
