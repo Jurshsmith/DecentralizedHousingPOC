@@ -36,7 +36,6 @@ contractAddress: 0x4D28Cea6336170307F21f8Bd2C9e326dfb581159
 View token etherscan here: https://rinkeby.etherscan.io/token/0x4d28cea6336170307f21f8bd2c9e326dfb581159
 
 ### Contract's ABI
-After running `npm run build`
 Check `eth-contracts/build/contracts` for Contracts ABI 
 
 ### Assets Activity on Opensea
