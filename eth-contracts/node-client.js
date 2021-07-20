@@ -4,7 +4,7 @@ require('dotenv').config({ path: '../.env' });
 const { INFURA_KEY, MNEMONIC, PUBLIC_KEY, PUBLIC_KEY_1, CONTRACT_ADDRESS } = process.env;
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const noOfTokensToMint = 9;
+const noOfTokensToMint = 10;
 
 async function main() {
 
